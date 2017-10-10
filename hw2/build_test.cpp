@@ -649,6 +649,20 @@ void test_build_tiny(Tester & t)
         test_build_single(t, w, e, cbs, ans,
             "2 bridges, same cities, different tolls");
     }
+    
+    // what i understood he said failed
+    {
+        w = 4;
+        e = 4;
+        bs.clear();
+        bs.push_back(Brg { 0, 1, 1 });
+        bs.push_back(Brg { 1, 0, 2 });
+        bs.push_back(Brg { 2, 3, 1 });
+        bs.push_back(Brg { 3, 2, 2 });
+        ans = 4;
+        test_build_single(t, w, e, cbs, ans,
+            "killer sequence");
+    }
 
     // 2 bridges, crossing, NW-SE is best
     {
