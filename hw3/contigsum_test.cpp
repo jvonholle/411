@@ -546,6 +546,21 @@ void test_contigSum_small(Tester & t)
     }
 
     {
+    const int DATASIZE = 4;
+    int data[DATASIZE] = { 6, 8, 7, -5 };
+    std::vector<int> v(data, data+DATASIZE);
+    const std::vector<int> & vc(v);    // Const ref to above
+    t.test(contigSum(vc.begin(), vc.end()) == 21, "Size 4, #1");
+    }
+    {
+    const int DATASIZE = 5;
+    int data[DATASIZE] = { 4, 6, -5, 7, 8 };
+    std::vector<int> v(data, data+DATASIZE);
+    const std::vector<int> & vc(v);    // Const ref to above
+    t.test(contigSum(vc.begin(), vc.end()) == 20, "Size 5, #1");
+    }
+    
+    {
     // Size 20, #1
     const int DATASIZE = 20;
     int data[DATASIZE] = { 6, -5, 0, 7, 11, -6, -1, 9, 12, -7,
