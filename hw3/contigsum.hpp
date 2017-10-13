@@ -9,6 +9,13 @@
 #include <algorithm>
 #include <vector>
 
+// get_contigSum
+// RAIter must be comparable by < and have a copy operator
+// Pre:
+//    First and last need to point to something
+// Post:
+//    Returns the maximum contig sum, the max contig sum from 
+//          the start, from the end, and the sum of the entire sequence
 template<typename RAIter>
 std::vector<int> get_contigSum(RAIter first, RAIter last) {
     if(last - first <= 0)
@@ -22,16 +29,16 @@ std::vector<int> get_contigSum(RAIter first, RAIter last) {
     if(last - first <= 2) {
         if(last - first == 1) {
             Rvec[3] = *first;
-            if(*first > 0) {
+            if(0 < *first) {
                 Rvec[0] = *first; Rvec[1] = *first; Rvec[2] = *first; 
             }
             return Rvec;
         }
         
         Rvec[3] = *first + *(last-1);
-        if(*first > Rvec[3]) 
+        if(Rvec[3] < *first) 
             Rvec[1] = *first;
-        if(*(last-1) > Rvec[3]) 
+        if(Rvec[3] < *(last-1)) 
             Rvec[2] = *(last-1);
         Rvec[0] = std::max({Rvec[1], Rvec[2], Rvec[3]});
         
@@ -57,6 +64,9 @@ std::vector<int> get_contigSum(RAIter first, RAIter last) {
     return Rvec;
 }
 
+// contigSum
+// first and last must be valid for get_contigSum
+// returns the maxium contig sum in the sequence
 template<typename RAIter>
 int contigSum(RAIter first, RAIter last) {
     auto ret = get_contigSum(first, last);
