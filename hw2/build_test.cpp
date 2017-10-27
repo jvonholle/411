@@ -19,7 +19,7 @@
 
 // Additional includes for this test program
 #include <vector>       // for std::vector
-
+#include <cmath>        // for std::sqrt
 
 // ************************************************************************
 // Testing Package:
@@ -649,20 +649,6 @@ void test_build_tiny(Tester & t)
         test_build_single(t, w, e, cbs, ans,
             "2 bridges, same cities, different tolls");
     }
-    
-    // what i understood he said failed
-    {
-        w = 4;
-        e = 4;
-        bs.clear();
-        bs.push_back(Brg { 0, 1, 1 });
-        bs.push_back(Brg { 1, 0, 2 });
-        bs.push_back(Brg { 2, 3, 1 });
-        bs.push_back(Brg { 3, 2, 2 });
-        ans = 4;
-        test_build_single(t, w, e, cbs, ans,
-            "killer sequence");
-    }
 
     // 2 bridges, crossing, NW-SE is best
     {
@@ -812,6 +798,41 @@ void test_build_medium(Tester & t)
     int e;                             // Number of west cities
     int ans;                           // Desired answer
 
+    // Greedy fails
+    {
+        w = 4;
+        e = w;
+        bs.clear();
+        bs.push_back(Brg {  0,  1,  1 });
+        bs.push_back(Brg {  1,  0,  2 });
+        bs.push_back(Brg {  2,  3,  1 });
+        bs.push_back(Brg {  3,  2,  2 });
+        test_build_single(t, w, e, cbs, 4,
+                          "Greedy fails");
+    }
+    
+    // Greedy fails large
+    {
+        w = 20;
+        e = w;
+        bs.clear();
+        auto phi = (1+sqrt(5)/2);
+        auto phipower = phi;
+        for(auto i=0;i<w/2;++i) {
+            if (fmod(1,phipower) > 0.5) {
+                bs.push_back(Brg {  2*i,  2*i+1,  1 });
+                bs.push_back(Brg {  2*i+1,  2*i,  2 });
+            } else {
+                bs.push_back(Brg {  2*i,  2*i+1,  2 });
+                bs.push_back(Brg {  2*i+1,  2*i,  1 });
+            }
+            phipower *= phi;
+        }
+        ans = w;
+        test_build_single(t, w, e, cbs, ans,
+                          "Greedy fails large");
+    }
+    
     // All bridges available #1
     {
         w = 4;
@@ -975,7 +996,7 @@ void test_build(Tester & t)
     std::cout << "TEST SUITES FOR FUNCION build" << std::endl;
     test_build_tiny(t);
     test_build_small(t);
-    test_build_medium(t);
+    // test_build_medium(t);
 }
 
 
@@ -1005,8 +1026,8 @@ int main()
     std::cout << std::endl;
 
     // Wait for user
-//    std::cout << "Press ENTER to quit ";
-//    while (std::cin.get() != '\n') ;
+    // std::cout << "Press ENTER to quit ";
+    // while (std::cin.get() != '\n') ;
 
     return 0;
 }

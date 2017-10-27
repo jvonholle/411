@@ -3,13 +3,27 @@
 // header for bridge algorithm
 // 29 Sept 2017
 
-#ifndef BUILD_H_INCLDUED
+#ifndef BUILD_H_INCLUDED
 #define BUILD_H_INCLUDED
 
 #include <vector>
 #include <cstddef>
 
 using Bridge = std::vector<int>;
+
+class bridge_tree {
+    public:
+        bridge_tree(const std::vector<Bridge> & bridges, const Bridge & first, const std::vector<Bridge> & set);
+        
+        int get_best();
+        void print_tree();
+        
+    private:
+        int toll = 0;
+        std::vector<bridge_tree> valid_next;
+        Bridge here;
+        std::vector<Bridge> so_far;
+};
 
 // build
 //  takes two ints, w & e, which denote the number of "cities" on either side
