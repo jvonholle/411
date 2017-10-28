@@ -13,9 +13,22 @@ using Bridge = std::vector<int>;
 
 class bridge_tree {
     public:
+        // ctor
+        // takes
+        //      vector of bridges (from build)
+        //      the bridge to start from
+        //      a set, empty when first called
+        // recursively generates a tree containing all valid bridge combos
         bridge_tree(const std::vector<Bridge> & bridges, const Bridge & first, const std::vector<Bridge> & set);
         
+        // get_best
+        // takes nothing
+        // depth first searches the tree to find the best toll
         int get_best();
+
+        // print_tree
+        // takes and returns nothing
+        // was used for debugging
         void print_tree();
         
     private:

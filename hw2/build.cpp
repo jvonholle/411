@@ -9,6 +9,7 @@
 #include <iostream>
 // Improved Greedy method
 // see header for parameter detail
+// I left this in here for myself
 // int build(int w, int e, const std::vector<Bridge> & bridges) {
 //     auto max_tol = 0;  // the maximum toll
 //     auto cur_tol = 0;  // the toll for the current set of bridges
@@ -44,6 +45,8 @@
 //     return max_tol; 
 // }
 
+// ctor
+// description in header
 bridge_tree::bridge_tree(const std::vector<Bridge> & bridges, const Bridge & first, const std::vector<Bridge> & set) { 
     if(bridges.size() <= 0)
         return;
@@ -83,6 +86,7 @@ bridge_tree::bridge_tree(const std::vector<Bridge> & bridges, const Bridge & fir
     
 }
 
+// description in header
 void bridge_tree::print_tree() {
     int temp = 0;
     for(auto i : so_far) {
@@ -98,6 +102,7 @@ void bridge_tree::print_tree() {
         
 }
 
+// description in header
 int bridge_tree::get_best() {
     if(valid_next.size() <= 0) {
         int temp = 0;
@@ -120,8 +125,7 @@ int bridge_tree::get_best() {
 // New exhaustive search version
 // see header for parmeter detail
 int build(int w, int e, const std::vector<Bridge> & bridges) {
-    std::vector<int> tolls;
-    
+    // anything with two or less bridges is easy enough to figure out without a tree
     if(bridges.size() <= 0) {
         return 0;
     } else if(bridges.size() == 1) {
@@ -132,10 +136,14 @@ int build(int w, int e, const std::vector<Bridge> & bridges) {
         else
             return std::max(bridges[0][2], bridges[1][2]);
     }        
+
+    std::vector<int> tolls;
+    // generate all of the best tolls for each bridge, add them to a list
     for(auto i : bridges) {
         auto cur = bridge_tree(bridges, i, {});
         tolls.push_back(cur.get_best());
     }
     
+    // return the max toll
     return *std::max_element(tolls.begin(), tolls.end());
 }
