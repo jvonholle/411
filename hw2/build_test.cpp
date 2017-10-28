@@ -979,6 +979,7 @@ void test_build_medium(Tester & t)
         test_build_single(t, w, e, cbs, ans,
             "One bridge crosses many #2");
     }
+  
 }
 
 
@@ -996,7 +997,7 @@ void test_build(Tester & t)
     std::cout << "TEST SUITES FOR FUNCION build" << std::endl;
     test_build_tiny(t);
     test_build_small(t);
-    // test_build_medium(t);
+    test_build_medium(t);
 }
 
 

@@ -48,33 +48,35 @@ bridge_tree::bridge_tree(const std::vector<Bridge> & bridges, const Bridge & fir
     if(bridges.size() <= 0)
         return;
         
-    auto shrink_set = bridges;
-    for(size_t i = 0; i < shrink_set.size()/2; ++i)
-        std::swap(shrink_set[i], shrink_set[shrink_set.size()-(i+1)]);
+    std::vector<Bridge> shrink_set;
+    for(size_t i = 1; i <= bridges.size(); ++i)
+        shrink_set.push_back(bridges[bridges.size()-i]);
         
-    here = first;
     so_far = set;
-    toll = here[2];
     
     for(auto k : so_far) 
-        if( ((here[0] <= k[0] && here[1] >= k[1]) || (here[0] >= k[0] && here[1] <= k[1])) && (here != k))
+        if((first[0] <= k[0] && first[1] >= k[1]) || (first[0] >= k[0] && first[1] <= k[1])) 
             return;
-    so_far.push_back(here);
+    
+    so_far.push_back(first);
     
     bool cross = false;
     for(size_t i = 0; i < bridges.size(); ++i) {
-        if(bridges[i] == here)
+        if(bridges[i] == first)
             continue;
         
         for(auto k : so_far) {
             cross = false;
-            if( ((bridges[i][0] <= k[0] && bridges[i][1] >= k[1]) || (bridges[i][0] >= k[0] && bridges[i][1] <= k[1])) && (bridges[i] != k))
+            if((bridges[i][0] <= k[0] && bridges[i][1] >= k[1]) || (bridges[i][0] >= k[0] && bridges[i][1] <= k[1]))
                 cross = true;
         }
-               
-        if(!cross) {
+        
+        if(cross) {
             shrink_set.pop_back();
-            valid_next.push_back( bridge_tree(shrink_set, bridges[i], so_far));
+            continue;
+        } else {
+            valid_next.push_back(bridge_tree(shrink_set, bridges[i], so_far));
+            shrink_set.pop_back();
         }
                
     }
@@ -84,45 +86,35 @@ bridge_tree::bridge_tree(const std::vector<Bridge> & bridges, const Bridge & fir
 void bridge_tree::print_tree() {
     int temp = 0;
     for(auto i : so_far) {
-        std::cout << i[0] << " -> " << i[1] << " | ";
+        std::cout << i[0] << " -> " << i[1] <<" | ";
         temp+= i[2];
     }
-    std::cout << "toll: " << temp << std::endl;
+    std::cout << "toll: " << temp << std::endl
+                << "kids: ";
     
-    // for(auto i : valid_next)
-        // i.print_tree();
-        
+    for(auto i : valid_next)
+        i.print_tree();
     std::cout << "------------------------------------------------" << std::endl;
+        
 }
 
 int bridge_tree::get_best() {
     if(valid_next.size() <= 0) {
         int temp = 0;
-        for(auto i : so_far)
-            temp += i[2];
+        for(auto j : so_far)
+            temp += j[2];
+            
         return temp;
     }
+    
+    int toll = 0;
     for(auto i : valid_next) {
         int temp = i.get_best();
         if(temp > toll)
             toll = temp;
     }
-        
-    std::sort(valid_next.begin(), valid_next.end(), [&](bridge_tree a, bridge_tree b){return a.toll < b.toll;});
     
-    for(size_t i = 0; i < valid_next.size(); ++i) {
-        std::cout << i << " : ";
-        valid_next[i].print_tree();
-    }
-        std::cout << "++++++++++++++++++++" << std::endl;
     return toll;
-    
-    // for(auto i : valid_next)
-    //     std::cout << i.toll << " ";
-    // std::cout << std::endl;
-    // std::cout << toll+valid_next[0].toll; 
-    
-    return 0;
 }
 
 // New exhaustive search version

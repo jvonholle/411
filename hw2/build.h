@@ -19,9 +19,7 @@ class bridge_tree {
         void print_tree();
         
     private:
-        int toll = 0;
         std::vector<bridge_tree> valid_next;
-        Bridge here;
         std::vector<Bridge> so_far;
 };
 
