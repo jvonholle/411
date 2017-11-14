@@ -19,7 +19,7 @@ class bridge_tree {
         //      the bridge to start from
         //      a set, empty when first called
         // recursively generates a tree containing all valid bridge combos
-        bridge_tree(const std::vector<Bridge> & bridges, const Bridge & first, const std::vector<Bridge> & set);
+        bridge_tree(std::vector<Bridge> bridges, const Bridge & first, const std::vector<Bridge> & set);
         
         // get_best
         // takes nothing

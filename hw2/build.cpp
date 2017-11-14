@@ -45,41 +45,40 @@
 //     return max_tol; 
 // }
 
+
+bool crosses(Bridge left, Bridge right) {
+    return ((left[0] <= right[0] && left[1] >= right[1]) || (left[0] >= right[0] && left[1] <= right[1]));
+}
+
 // ctor
 // description in header
-bridge_tree::bridge_tree(const std::vector<Bridge> & bridges, const Bridge & first, const std::vector<Bridge> & set) { 
+bridge_tree::bridge_tree(std::vector<Bridge> bridges, const Bridge & first, const std::vector<Bridge> & set) { 
     if(bridges.size() <= 0)
         return;
-        
-    std::vector<Bridge> shrink_set;
-    for(size_t i = 1; i <= bridges.size(); ++i)
-        shrink_set.push_back(bridges[bridges.size()-i]);
         
     so_far = set;
     
     for(auto k : so_far) 
-        if((first[0] <= k[0] && first[1] >= k[1]) || (first[0] >= k[0] && first[1] <= k[1])) 
+        if( crosses(first, k) )
             return;
     
     so_far.push_back(first);
     
     bool cross = false;
-    for(size_t i = 0; i < bridges.size(); ++i) {
-        if(bridges[i] == first)
+    for(auto i : bridges) {
+        if(i == first)
             continue;
         
-        for(auto k : so_far) {
-            cross = false;
-            if((bridges[i][0] <= k[0] && bridges[i][1] >= k[1]) || (bridges[i][0] >= k[0] && bridges[i][1] <= k[1]))
-                cross = true;
-        }
+        cross = false;
+        for(auto k : so_far)
+            cross = crosses(i, k);
         
         if(cross) {
-            shrink_set.pop_back();
+            bridges.pop_back();
             continue;
         } else {
-            valid_next.push_back(bridge_tree(shrink_set, bridges[i], so_far));
-            shrink_set.pop_back();
+            valid_next.push_back(bridge_tree(bridges, bridges.back(), so_far));
+            bridges.pop_back();
         }
                
     }
@@ -131,7 +130,7 @@ int build(int w, int e, const std::vector<Bridge> & bridges) {
     } else if(bridges.size() == 1) {
         return bridges[0][2];
     } else if(bridges.size() == 2) {
-        if( !((bridges[0][0] <= bridges[1][0] && bridges[0][1] >= bridges[1][1]) || (bridges[0][0] >= bridges[1][0] && bridges[0][1] <= bridges[1][1])) )
+        if( !crosses(bridges[0], bridges[1]) )
             return bridges[0][2]+bridges[1][2];
         else
             return std::max(bridges[0][2], bridges[1][2]);
