@@ -1,7 +1,7 @@
 // build.h
 // James R Von Holle
 // header for bridge algorithm
-// 29 Sept 2017
+// 20 Nov 2017
 
 #ifndef BUILD_H_INCLUDED
 #define BUILD_H_INCLUDED

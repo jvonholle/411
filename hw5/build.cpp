@@ -1,7 +1,7 @@
 // build.cpp
 // James R Von Holle
 // source for bridge algorithm
-// 29 Sept 2017
+// 20 Nov 2017
 
 #include "build.h"
 #include <algorithm>
